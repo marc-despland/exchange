@@ -4,31 +4,51 @@ var database = {};
 const app = express()
 //app.use( bodyParser.json() );
 app.get('*', function (req, res) {
-	res.send(database[req.url]);
+	if ((req.headers.appkey === undefined) || (req.headers.appkey !="absimiliard")) {
+		res.status(403);
+		res.send();
+	} else {
+		res.send(database[req.url]);
+	}
 });
 app.put('*', function (req, res) {
-	var data = "";
-	req.on('data', function(chunk) {
-		data+=chunk;
-	});
-	req.on('end', function() {
-		database[req.url]=data;
-		res.send("OK");
-	});	
+	if ((req.headers.appkey === undefined) || (req.headers.appkey !="absimiliard")) {
+		res.status(403);
+		res.send();
+	} else {
+		var data = "";
+		req.on('data', function(chunk) {
+			data+=chunk;
+		});
+		req.on('end', function() {
+			database[req.url]=data;
+			res.send("OK");
+		});
+	}
 });
 app.post('*', function (req, res) {
-	var data = "";
-	req.on('data', function(chunk) {
-		data+=chunk;
-	});
-	req.on('end', function() {
-		database[req.url]=data;
-		res.send("OK");
-	});	
+	if ((req.headers.appkey === undefined) || (req.headers.appkey !="absimiliard")) {
+		res.status(403);
+		res.send();
+	} else {
+		var data = "";
+		req.on('data', function(chunk) {
+			data+=chunk;
+		});
+		req.on('end', function() {
+			database[req.url]=data;
+			res.send("OK");
+		});
+	}
 });
 app.delete('*', function (req, res) {
-	delete database[req.url];
-	res.send("OK");
+	if ((req.headers.appkey === undefined) || (req.headers.appkey !="absimiliard")) {
+		res.status(403);
+		res.send();
+	} else {
+		delete database[req.url];
+		res.send("OK");
+	}
 })
 
 app.listen(8080, function () {
